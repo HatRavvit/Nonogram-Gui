@@ -9,18 +9,17 @@ import javax.swing.border.MatteBorder;
 public class Cell extends JFrame{
 	JPanel cellPanel;
 	JLabel xLabel;
-	char ans;
 	int row, col;
 	int mode;
 	int topB, botB, leftB, rightB;
-	boolean xVisible;
+	char state;
 	
 	public Cell(int row, int col, int maxRow, int maxCol) {
 		this.row = row;
 		this.col = col;
 		mode = 0;
 		topB = 0;botB = 0;leftB = 0;rightB = 0;
-		xVisible = false;
+		state = 'E';
 		
 		setBorder(maxRow, maxCol);
 		
@@ -31,27 +30,27 @@ public class Cell extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(mode==0) {
-					if(cellPanel.getBackground()==Color.black) {
+					if(state=='O') {
 						cellPanel.setBackground(new Color(240, 240, 240));
+						state = 'E';
 					}
 					else {
 						cellPanel.setBackground(Color.black);
 						xLabel.setVisible(false);
-						xVisible = false;
+						state = 'O';
 					}
 				}
 				else if(mode==1) {
-					if(cellPanel.getBackground()==Color.black) {
+					if(state=='O') {
 						cellPanel.setBackground(new Color(240, 240, 240));
-						
 					}
-					if(xVisible) {
+					if(state=='X') {
 						xLabel.setVisible(false);
-						xVisible = false;
+						state = 'E';
 					}
 					else {
 						xLabel.setVisible(true);
-						xVisible = true;
+						state = 'X';
 					}
 				}
 			}
@@ -110,5 +109,26 @@ public class Cell extends JFrame{
 		}
 	}
 	
+	public char getCellInfo() {
+		return state;
+	}
+	
+	public void setCellInfo(char in) {
+		if(in=='O') {
+			cellPanel.setBackground(Color.black);
+			xLabel.setVisible(false);
+			state = 'O';
+		}
+		else if(in=='X') {
+			cellPanel.setBackground(new Color(240, 240, 240));
+			xLabel.setVisible(true);
+			state = 'X';
+		}
+		else {
+			cellPanel.setBackground(new Color(240, 240, 240));
+			xLabel.setVisible(false);
+			state = 'E';
+		}
+	}
 	
 }

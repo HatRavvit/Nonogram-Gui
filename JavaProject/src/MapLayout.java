@@ -6,6 +6,7 @@ import javax.swing.border.LineBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
+import java.util.Random;
 
 public class MapLayout extends JFrame{
 	JPanel panel, temp;
@@ -107,6 +108,39 @@ public class MapLayout extends JFrame{
 		btnX.setBounds(330, 5, 60, 60);
 		btnX.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 30));
 		btnPanel.add(btnX);
+		
+		JButton hintButton = new JButton("Hint");
+		hintButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Random rand = new Random();
+				int temp, count = 0;
+				for(int i = 0;i<board.getRow();i++) {
+					for(int j=0;j<board.getColumn();j++) {
+						if(cells[i][j].getCellInfo()=='E') {
+							count++;
+						}
+					}
+				}
+				temp = rand.nextInt(count);
+				count = 0;
+				Loop:
+				for(int i = 0;i<board.getRow();i++) {
+					for(int j=0;j<board.getColumn();j++) {
+						if(count==temp) {
+							cells[i][j].setCellInfo(board.getAnswer(i, j));
+							break Loop;
+						}
+						else {
+							count++;
+						}
+					}
+				}
+			}
+		});
+		hintButton.setBounds(460, 15, 90, 40);
+		hintButton.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 25));
+		btnPanel.add(hintButton);
 	}
 	
 	
