@@ -45,7 +45,7 @@ public class NonogramGui implements Layouts.TitleLayout{
 				DifficultySelectionLayout difficultySelectionLayout = new DifficultySelectionLayout(f, titlePanel);
 			}
 		});
-		b.setBounds(235, 400, 130, 40);
+		b.setBounds(235, 400, 150, 50);
 		b.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 30));
 		panel.add(b);
 		
