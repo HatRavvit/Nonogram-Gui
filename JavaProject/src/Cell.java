@@ -23,7 +23,7 @@ public class Cell{
 		setBorder(maxRow, maxCol);
 		
 		cellPanel = new JPanel();
-		cellPanel.setBorder(new MatteBorder(topB, leftB, botB, rightB, Color.black));
+		cellPanel.setBorder(new MatteBorder(topB, leftB, botB, rightB, Color.lightGray));
 		cellPanel.setLayout(null);
 		cellPanel.addMouseListener(new MouseAdapter() {
 			@Override
@@ -69,12 +69,12 @@ public class Cell{
 		xLabel.setVisible(false);
 		xLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		if(maxCol>maxRow) {
-			xLabel.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 500/maxCol));
+			xLabel.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 490/maxCol));
 		}
 		else {
-			xLabel.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 500/maxRow));
+			xLabel.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 490/maxRow));
 		}
-		xLabel.setBounds(1, 0, 400/maxCol, 400/maxRow);
+		xLabel.setBounds(leftB, 0, (400/maxCol)-topB-botB, (400/maxRow)-leftB-rightB);
 		cellPanel.add(xLabel);
 	}
 	
@@ -96,7 +96,7 @@ public class Cell{
 			botB = 3;
 		}
 		else if(row%5==0) {
-			topB = 3;
+			topB = 2;
 		}else {
 			topB = 1;
 		}
@@ -109,7 +109,7 @@ public class Cell{
 			rightB = 3;
 		}
 		else if(col%5==0) {
-			leftB = 3;
+			leftB = 2;
 		}
 		else {
 			leftB = 1;
