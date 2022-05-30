@@ -45,6 +45,7 @@ public class Board {
 		}
 		
 		efs.close();
+		afs.close();
 	}
 	
 	public int getRow() {

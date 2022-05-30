@@ -3,7 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 
 //Print row number
-public class RowNumber extends JFrame{
+public class RowNumber{
 	JPanel panel;
 	JLabel temp;
 	

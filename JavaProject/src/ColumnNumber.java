@@ -3,7 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 
 //Print column numbers
-public class ColumnNumber extends JFrame{
+public class ColumnNumber{
 	JPanel panel;
 	JLabel temp;
 	

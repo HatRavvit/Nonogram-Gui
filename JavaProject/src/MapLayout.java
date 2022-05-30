@@ -1,22 +1,29 @@
 import java.awt.*;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
-public class MapLayout extends JFrame{
-	JPanel panel, temp;
+public class MapLayout{
+	JFrame f;
+	JPanel panel, lPanel;
+	JLabel lifeLabel;
 	Cell[][] cells;
 	Board board;
 	int mode;
+	int life;
+	int hint;
 	
 	public MapLayout(JFrame f, JPanel lPanel, int size, int id) throws FileNotFoundException {
+		this.f = f;
 		board = new Board(size, id);
 		mode = 0;
+		life = 5;
+		hint = 3;
+		this.lPanel = lPanel;
 		panel = new JPanel();
 		panel.setBounds(0,0,600,600);
 		panel.setLayout(null);
@@ -26,6 +33,7 @@ public class MapLayout extends JFrame{
 		panel.add(mapPanel);
 		mapPanel.setLayout(new GridLayout(board.getRow(), board.getColumn(), 0, 0));
 		cells = new Cell[board.getRow()][board.getColumn()];
+		
 		//For column number side
 		JPanel colPanel = new JPanel();
 		colPanel.setBounds(150, 10, 400, 100);
@@ -47,12 +55,17 @@ public class MapLayout extends JFrame{
 		//For main board
 		for(int i = 0;i<board.getRow();i++) {
 			for(int j=0;j<board.getColumn();j++) {
-				cells[i][j] = new Cell(i,j, board.getRow(),board.getColumn());
+				cells[i][j] = new Cell(i,j, board.getRow(),board.getColumn(),board.ans[i][j], this);
 				mapPanel.add(cells[i][j].getPanel());
 			}
 		}
+		//Life
+		lifeLabel = new JLabel("Life: "+life);
+		lifeLabel.setBounds(10, 10, 100, 45);
+		lifeLabel.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 30));
+		panel.add(lifeLabel);
 		
-		makeLower(lPanel);
+		makeLower();
 		
 		f.getContentPane().add(panel);
 	}
@@ -60,8 +73,17 @@ public class MapLayout extends JFrame{
 	public JPanel getPanel() {
 		return panel;
 	}
-	//Make lower 3 button
-	public void makeLower(JPanel lPanel) {
+	//If paint wrong cell
+	public void lifeDecrement() {
+		life--;
+		lifeLabel.setText("Life: "+life);
+		if(life==0) {
+			panel.setVisible(false);
+			FailLayout failLayout = new FailLayout(f, lPanel);
+		}
+	}
+	//Make lower 4 button
+	public void makeLower() {
 		JPanel btnPanel = new JPanel();
 		btnPanel.setBounds(0, 520, 600, 80);
 		btnPanel.setLayout(null);
@@ -109,7 +131,7 @@ public class MapLayout extends JFrame{
 		btnX.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 30));
 		btnPanel.add(btnX);
 		
-		JButton hintButton = new JButton("Hint");
+		JButton hintButton = new JButton("Hint: "+hint);
 		hintButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -127,8 +149,10 @@ public class MapLayout extends JFrame{
 				Loop:
 				for(int i = 0;i<board.getRow();i++) {
 					for(int j=0;j<board.getColumn();j++) {
-						if(count==temp) {
+						if(count==temp&&hint!=0) {
 							cells[i][j].setCellInfo(board.getAnswer(i, j));
+							hint--;
+							hintButton.setText("Hint: "+hint);
 							break Loop;
 						}
 						else {
@@ -138,12 +162,60 @@ public class MapLayout extends JFrame{
 				}
 			}
 		});
-		hintButton.setBounds(460, 15, 90, 40);
+		hintButton.setBounds(430, 15, 120, 40);
 		hintButton.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 25));
 		btnPanel.add(hintButton);
 	}
 	
+	public void lineFinish() {
+		//For row
+		for(int i = 0;i<board.getRow();i++) {
+			int count = 0;
+			for(int j=0;j<board.getColumn();j++) {
+				if(board.ans[i][j]=='O' && cells[i][j].getCellInfo()!='O') {
+					count++;
+				}
+			}
+			if(count==0) {
+				for(int j=0;j<board.getColumn();j++) {
+					if(board.ans[i][j]=='X') {
+						cells[i][j].setCellInfo('X');;
+					}
+				}
+			}
+		}
+		//For column
+		for(int i = 0;i<board.getColumn();i++) {
+			int count = 0;
+			for(int j=0;j<board.getRow();j++) {
+				if(board.ans[j][i]=='O' && cells[j][i].getCellInfo()!='O') {
+					count++;
+				}
+			}
+			if(count==0) {
+				for(int j=0;j<board.getRow();j++) {
+					if(board.ans[j][i]=='X') {
+						cells[j][i].setCellInfo('X');;
+					}
+				}
+			}
+		}
+	}
 	
-	
+	public void whenFinish() {
+		int count = 0;
+		for(int i = 0;i<board.getRow();i++) {
+			for(int j=0;j<board.getColumn();j++) {
+				if(board.ans[i][j]!=cells[i][j].getCellInfo()) {
+					count++;
+				}
+			}
+		}
+		if(count==0) {
+			panel.setVisible(false);
+			f.add(new SuccessLayout(f, lPanel, board).getPanel());
+		}
+	}
+
 	
 }

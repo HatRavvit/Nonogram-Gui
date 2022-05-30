@@ -3,18 +3,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-public class Cell extends JFrame{
+public class Cell{
 	JPanel cellPanel;
 	JLabel xLabel;
 	int row, col;
 	int mode;
 	int topB, botB, leftB, rightB;
-	char state;
+	char state, answer;
 	
-	public Cell(int row, int col, int maxRow, int maxCol) {
+	public Cell(int row, int col, int maxRow, int maxCol, char answer, MapLayout map) {
 		this.row = row;
 		this.col = col;
 		mode = 0;
@@ -35,9 +34,17 @@ public class Cell extends JFrame{
 						state = 'E';
 					}
 					else {
-						cellPanel.setBackground(Color.black);
-						xLabel.setVisible(false);
-						state = 'O';
+						if(answer!='O') {
+							xLabel.setForeground(Color.red);
+							xLabel.setVisible(true);
+							state = 'X';
+							map.lifeDecrement();
+						}
+						else {
+							cellPanel.setBackground(Color.black);
+							xLabel.setVisible(false);
+							state = 'O';
+						}
 					}
 				}
 				else if(mode==1) {
@@ -53,6 +60,8 @@ public class Cell extends JFrame{
 						state = 'X';
 					}
 				}
+				map.lineFinish();
+				map.whenFinish();
 			}
 		});
 		
@@ -66,9 +75,7 @@ public class Cell extends JFrame{
 			xLabel.setFont(new Font("ÇÑÄÄ ¸»¶û¸»¶û Bold", Font.BOLD, 500/maxRow));
 		}
 		xLabel.setBounds(1, 0, 400/maxCol, 400/maxRow);
-		
 		cellPanel.add(xLabel);
-		//xLabel.setVisible(false);
 	}
 	
 	public void setMode(int mode) {
@@ -130,5 +137,7 @@ public class Cell extends JFrame{
 			state = 'E';
 		}
 	}
+	
+	
 	
 }
