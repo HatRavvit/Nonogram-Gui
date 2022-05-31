@@ -151,6 +151,7 @@ public class MapLayout{
 					for(int j=0;j<board.getColumn();j++) {
 						if(count==temp&&hint!=0) {
 							cells[i][j].setCellInfo(board.getAnswer(i, j));
+							lineFinish();
 							hint--;
 							hintButton.setText("Hint: "+hint);
 							break Loop;
